@@ -1,4 +1,4 @@
-class Despesa{
+class Despesa{//criar objeto despesa
     constructor(ano,mes,dia,tipo,descricao,valor){
         this.ano = ano
         this.mes = mes
@@ -7,7 +7,7 @@ class Despesa{
         this.descricao = descricao
         this.valor = valor
     }
-    validaDados(){
+    validaDados(){//checando se os dados foram preenchidos
         for(let i in this){
             if(this[i] == undefined || this[i]=='' || this[i]==null){
                 return false
@@ -17,18 +17,17 @@ class Despesa{
     }
 }
 //pela nescessidade de termos um id dinamico, iremos criar uma nova classe para implementar está lógica na nossa aplicação 
-class Bd{
+class Bd{//parte do id 
     constructor(){
-    
-        let id = localStorage.getItem('id')
+        let id = localStorage.getItem('id')//criando um item id que começa igual a 0
         if(id === null){
             localStorage.setItem('id',0)
         }
     }
     recuperarRegistros(){
         let despesas = Array()
-        let id = localStorage.getItem('id')
-        for(let i = 1;i<=id;i++){
+        let id = localStorage.getItem('id') //id é a chave e ele está pegando o valor que está contido dentro dele
+        for(let i = 1;i<=id;i++){ //passando o array todo e pegando os valores de cada item 
             let despesa = JSON.parse(localStorage.getItem(i))
             if(despesa !==null){
                 despesa.id = i
@@ -44,12 +43,14 @@ class Bd{
     }
     //toda esta lógica foi só colocar ids que não são iguais
     gravar(d){
-        let id = this.proximoId()
+        let id = this.proximoId()//usou a função anterior para conseguir o próximo id, pq se tiver um sobre o outro 
+        // ele acaam por se sobreescrever
         localStorage.setItem(id, JSON.stringify(d))
         localStorage.setItem('id',id)//PRECISA disso aqui, para garantir que o id de nome id será mudado
         //se não ele interpretará sempre como o mesmo id e não vai ir para o próximo item
     }
-    pesquisarProd(despesaPesquisa){
+    pesquisarProd(despesaPesquisa){//aqui está a lógica da página consulta para colocar na lista somente os itens pesquisadados
+
         let despesasFiltradas = Array()
         despesasFiltradas = this.recuperarRegistros()//esta referenciando-se ao método da própria classe
         // console.log(p)//vai mostrar a lista que foi criada com os critérios que foram estabelecidos na outra função 
@@ -87,9 +88,9 @@ function pegandoValorDespesa(){
     let tipo = document.getElementById('tipo')
     let descricao= document.getElementById('descricao')
     let valor = document.getElementById('valor')
-    let despesa = new Despesa(ano.value,mes.value,dia.value,tipo.value,descricao.value,valor.value)
+    let despesa = new Despesa(ano.value,mes.value,dia.value,tipo.value,descricao.value,valor.value)//criou um objeto com os valores que estão na página HTML
     //precisamos gravar dentro do localStorage
-    if(despesa.validaDados()){
+    if(despesa.validaDados()){//modal caso sucesso
         let titulo= document.getElementById('titulo')
         let texto = document.getElementById('texto')
         let botao = document.getElementById('botao')
@@ -101,7 +102,7 @@ function pegandoValorDespesa(){
         botao.className = 'btn btn-success'
         botao.innerHTML = 'Voltar'
         divAcima.className ='modal-header text-success'
-    }else{
+    }else{//modal caso erro
         let titulo= document.getElementById('titulo')
         let texto = document.getElementById('texto')
         let botao = document.getElementById('botao')
@@ -126,7 +127,7 @@ function pegandoValorDespesa(){
 function carregaListaDespesa(despesas = Array(), filtro = false){
     if (despesas.length ==0 && filtro == false){
         despesas = bd.recuperarRegistros()
-    }
+    }//para checar se não tem nenhum filtro, aí pode colocar todos os elementos da list sem problemas
     let listaDespesas = document.getElementById('listaDespesas')
     listaDespesas.innerHTML = ''
     despesas.forEach(function(d){
