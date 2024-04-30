@@ -33,4 +33,8 @@ Contribuições são bem-vindas! Se você quiser contribuir para este projeto, s
 Este projeto foi retirado de um curso, link do curso: https://www.udemy.com/course/web-completo/ e todos os direitos reservados para, Jamilton Damasceno e Jorge Santana.
 
 ## Minha Contribuição para o projeto
-Foi proposto no final do curso que eu adicionasse uma página que mostrasse a soma dos valores de cada mês e que colocasse um modal no botão para excluir itens
+Foi proposto no final do curso que eu adicionasse uma página que mostrasse a soma dos valores de cada mês e que colocasse um modal no botão confirmar para o usuário que os itens haviam sido removidos. E assim eu fiz, concluindo esta parte do curso com exito. Na parte de somar os valores eu tirei algumas das opções que tinha em cadastro e consulta, pois não achei elas necessárias para esta parte do meu projeto.
+![Captura de tela 2024-04-30 163439](https://github.com/ozne32/or-amentoPessoal/assets/84781872/16415f47-b9da-466a-9a75-13bd353dc908)
+Além disso, coloquei um feature que achei interessante. Ao clicar no botão de excluir o item na aba cadastro, o programa pergunta para o usuário se ele realmente quer fazer aquela ação, para prevenir misclicks.
+![Captura de tela 2024-04-30 163157](https://github.com/ozne32/or-amentoPessoal/assets/84781872/c2d1d8c4-7baf-49e6-9568-189f3dc84fc7)
+
