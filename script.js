@@ -27,7 +27,7 @@ class Bd{//parte do id
     recuperarRegistros(){
         let despesas = Array()
         let id = localStorage.getItem('id') //id é a chave e ele está pegando o valor que está contido dentro dele
-        for(let i = 1;i<=id;i++){ //passando o array todo e pegando os valores de cada item 
+        for(let i = 1;i<=id;i++){ //passando o array todo e pegando os valores de cada item             
             let despesa = JSON.parse(localStorage.getItem(i))
             if(despesa !==null){
                 despesa.id = i
@@ -50,27 +50,26 @@ class Bd{//parte do id
         //se não ele interpretará sempre como o mesmo id e não vai ir para o próximo item
     }
     pesquisarProd(despesaPesquisa){//aqui está a lógica da página consulta para colocar na lista somente os itens pesquisadados
-
         let despesasFiltradas = Array()
         despesasFiltradas = this.recuperarRegistros()//esta referenciando-se ao método da própria classe
         // console.log(p)//vai mostrar a lista que foi criada com os critérios que foram estabelecidos na outra função 
         // console.log(despesasFiltradas)//mostra a lista de todos os objetos
-        if(despesaPesquisa.dia != ''){
+        if(despesaPesquisa.dia != '' ){
             despesasFiltradas =despesasFiltradas.filter(d=>d.dia ==despesaPesquisa.dia) 
         }
-        if(despesaPesquisa.mes != ''){
+        if(despesaPesquisa.mes != '' ){
             despesasFiltradas =despesasFiltradas.filter(d=>d.mes ==despesaPesquisa.mes) 
         }
-        if(despesaPesquisa.ano != ''){
+        if(despesaPesquisa.ano != ''  ){
             despesasFiltradas =despesasFiltradas.filter(d=>d.ano ==despesaPesquisa.ano) 
         }
-        if(despesaPesquisa.tipo != ''){
+        if(despesaPesquisa.tipo != '' ){
             despesasFiltradas =despesasFiltradas.filter(d=>d.tipo ==despesaPesquisa.tipo) 
         }
-        if(despesaPesquisa.valor != ''){
+        if(despesaPesquisa.valor != ''  ){
             despesasFiltradas =despesasFiltradas.filter(d=>d.valor ==despesaPesquisa.valor) 
         }
-        if(despesaPesquisa.descricao != ''){
+        if(despesaPesquisa.descricao != '' ){
             despesasFiltradas =despesasFiltradas.filter(d=>d.descricao ==despesaPesquisa.descricao) 
         }
         return despesasFiltradas
@@ -124,56 +123,88 @@ function pegandoValorDespesa(){
     despesa.value = ''
     
 }
-function carregaListaDespesa(despesas = Array(), filtro = false){
+function carregaListaDespesa(despesas=Array(), filtro = false){
+    
     if (despesas.length ==0 && filtro == false){
         despesas = bd.recuperarRegistros()
     }//para checar se não tem nenhum filtro, aí pode colocar todos os elementos da list sem problemas
     let listaDespesas = document.getElementById('listaDespesas')
     listaDespesas.innerHTML = ''
     despesas.forEach(function(d){
-        // criando a linha tr
+        // criando a linha tr   
         let linha  = listaDespesas.insertRow()
         //criando a coluna td
-        linha.insertCell(0).innerHTML = `${d.dia}/${d.mes}/${d.ano} `
-        switch(d.tipo){
-            case '1':d.tipo = 'Alimentação'
-                break
-            case '2':d.tipo = 'Educação'
-                break
-            case '3':d.tipo = 'Lazer'
-                break
-            case '4':d.tipo = 'Saúde'
-                break
-            case '5':d.tipo = 'Transporte'
-                break
-        }
-        linha.insertCell(1).innerHTML = d.tipo
+            linha.insertCell(0).innerHTML = `${d.dia}/${d.mes}/${d.ano} `
+            switch(d.tipo){
+                case '1':d.tipo = 'Alimentação'
+                    break
+                case '2':d.tipo = 'Educação'
+                    break
+                case '3':d.tipo = 'Lazer'
+                    break
+                case '4':d.tipo = 'Saúde'
+                    break
+                case '5':d.tipo = 'Transporte'
+                    break
+            }
+            linha.insertCell(1).innerHTML = d.tipo
 
-        linha.insertCell(2).innerHTML = d.descricao
-        linha.insertCell(3).innerHTML = d.valor
-        let btn = document.createElement('button')
-        btn.className = 'btn btn-danger'
-        btn.innerHTML = '<i class = "fas fa-times"></i>'
-        btn.id = `id_despesa_${d.id}`
-        btn.onclick= function(){
-            let id = this.id.replace('id_despesa_','')
-            bd.remover(id)
-            window.location.reload()
+            linha.insertCell(2).innerHTML = d.descricao
+            linha.insertCell(3).innerHTML = d.valor
+            if(window.location.href.includes('consulta.html')){
+                let btn = document.createElement('button')
+                btn.className = 'btn btn-danger'
+                btn.innerHTML = '<i class = "fas fa-times"></i>'
+                btn.id = `id_despesa_${d.id}`
+                btn.onclick= function(){
+                    let id = this.id.replace('id_despesa_','')
+                    //bd.remover(id)            
+                    $('#modalDescarta').modal('show')
+                    let botao2 = document.getElementById('botao2')
+                    let botao = document.getElementById('botao1')
+                    let titulo= document.getElementById('titulo1')
+                    let texto = document.getElementById('texto1')
+                    let divAcima = document.getElementById('divTitulo1')
+                    titulo.innerHTML = `ATENÇÃO`
+                    botao2.className = 'btn btn-danger'
+                    botao2.innerHTML = 'Voltar'
+                    botao.className = 'btn btn-success'
+                    botao.innerHTML = 'Prosseguir'
+                    botao.onclick = function(){
+                        bd.remover(id)
+                        window.location.reload()
+                    }
+                    titulo.className += " " + 'text-danger'
+                    texto.innerHTML = `você está retirando o elemento ${d.descricao}, com valor $${d.valor},00, tem certeza desta operação??`
+                    divAcima.className ='modal-header' 
+                }
+                linha.insertCell(4).append(btn)
+            }   
+            }
+            )
         }
-        linha.insertCell(4).append(btn)
-    })
+        
 
-}
+
 function pesquisar(){
-    let dia = document.getElementById('dia').value
     let ano = document.getElementById('ano').value
     let mes = document.getElementById('mes').value
-    let descricao = document.getElementById('descricao').value
-    let valor = document.getElementById('valor').value
     let tipo = document.getElementById('tipo').value
-    let pesquisa = new Despesa(ano,mes,dia,tipo,descricao,valor)
-    let pesquisaLista =bd.pesquisarProd(pesquisa)
-    this.carregaListaDespesa(pesquisaLista, true)
+    if(window.location.href.includes('total.html')){
+        let pesquisa = new Despesa(ano, mes,'',tipo,'','')
+        console.log(pesquisa)
+        let pesquisaLista = bd.pesquisarProd(pesquisa)
+        this.carregaListaDespesa(pesquisaLista, true)
+        somar(pesquisaLista)
+    }else{
+        let dia = document.getElementById('dia').value
+        let descricao = document.getElementById('descricao').value
+        let valor = document.getElementById('valor').value
+        let pesquisa = new Despesa(ano,mes,dia,tipo,descricao,valor)
+        let pesquisaLista =bd.pesquisarProd(pesquisa)
+        this.carregaListaDespesa(pesquisaLista, true)       
+    }
+    
     // //criando a linha
     // pesquisaLista.forEach((d)=>{
     //     //criando a linha (tr)
@@ -199,4 +230,13 @@ function pesquisar(){
 
     //ele tirou todo bloco acima e colocou na função 
     //lembrete tudo que é repetido dá para melhorar
+}
+function somar(pesquisa){
+    soma = 0 
+    for(let precos in pesquisa){
+        soma += parseFloat(pesquisa[precos].valor)
+    }
+    mostraSoma = document.getElementById('resultado')
+    mostraSoma.className = 'lead font-weight-bold'
+    mostraSoma.innerHTML=`Soma: R$${soma},00`
 }
